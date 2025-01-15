@@ -19,12 +19,13 @@ class _JoinScreenState extends State<JoinScreen> {
   void onCreateButtonPressed(BuildContext context) async {
     // call api to create meeting and then navigate to MeetingScreen with meetingId,token
     await createMeeting().then((meetingId) {
+      
       if (!context.mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => MeetingScreen(
             meetingId: meetingId,
-            token: token,
+            token: token!,
             callerId: '',
             url: '',
           ),

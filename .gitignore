@@ -3,7 +3,7 @@
 
 # This is dynamic in a monorepo
 bin/internal/engine.version
-
+Server/node_modules
 # Miscellaneous
 *.class
 *.lock
@@ -28,6 +28,8 @@ bin/internal/engine.version
 .settings/
 .vscode/
 .metadata
+
+
 
 # Flutter repo-specific
 /bin/cache/
