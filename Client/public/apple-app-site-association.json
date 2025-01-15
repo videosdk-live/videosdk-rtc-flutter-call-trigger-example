@@ -1,0 +1,11 @@
+{
+    "applinks": {
+      "apps": [],
+      "details": [
+        {
+          "appID": "8GZ776NSU2.live.videosdk.callkit.flutter.example",
+          "paths": ["*"]
+        }
+      ]
+    }
+  }

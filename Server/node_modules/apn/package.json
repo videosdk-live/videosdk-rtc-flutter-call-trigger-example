@@ -1,0 +1,61 @@
+{
+  "name": "apn",
+  "description": "An interface to the Apple Push Notification service for Node.js",
+  "version": "2.2.0",
+  "author": "Andrew Naylor <argon@mkbot.net>",
+  "contributors": [
+    {
+      "name": "Florian Reinhart",
+      "email": "florian.reinhart@gmail.com"
+    }
+  ],
+  "keywords": [
+    "apple",
+    "push",
+    "push notifications",
+    "iOS",
+    "apns",
+    "notifications"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bugs": {
+    "email": "florian.reinhart@gmail.com",
+    "url": "https://github.com/node-apn/node-apn/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-apn/node-apn.git"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "http2": "https://github.com/node-apn/node-http2/archive/apn-2.1.4.tar.gz",
+    "node-forge": "^0.7.1",
+    "jsonwebtoken": "^8.1.0",
+    "verror": "^1.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.3",
+    "sinon-chai": "^2.14.0"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "jshintConfig": {
+    "node": true
+  },
+  "eslintConfig": {
+    "ecmaVersion": 6,
+    "env": {
+      "es6": true,
+      "node": true
+    }
+  },
+  "engines": {
+    "node": ">= 4.6.0"
+  },
+  "license": "MIT"
+}
