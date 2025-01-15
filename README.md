@@ -17,7 +17,7 @@
    firebase login
    ```
 
-![Firebase CLI Setup](./assets/image-4.png)
+![Firebase CLI Setup](./assets/image-9.png)
 
 ## Step 2: iOS Side Setup
 
@@ -28,41 +28,54 @@
 
 ### Configure PushKit
 
-1. You must upload an APNs Auth Key in order to implement push notifications. To send push notifications via an APNs Auth Key, you need:
-   - Auth Key file
-   - Team ID
-   - Key ID
-   - Your app’s bundle ID
+You must upload an APNs Auth Key in order to implement push notifications. We need the following details about your app when sending push notifications via an APNs Auth Key:
 
-2. To create an APNs Auth Key:
-   - Visit the Apple [Developer Member Center](https://developer.apple.com/account/).
-   - Click on **Certificates, Identifiers & Profiles**.
-   - Go to **Keys** from the left side. Create a new Auth Key by clicking on the plus button in the top right corner.
+- Auth Key file
+- Team ID
+- Key ID
+- Your app’s bundle ID
 
-   ![Create Auth Key](./assets/image-5.png)
+To create an APNs auth key, follow the steps below.
 
-3. Add a Key Name and select **APNs**.
-4. Click the **Register** button.
-5. Download your auth key file and upload this file to the Firebase dashboard without changing its name.
+Visit the Apple [Developer Member Center](https://developer.apple.com/account/)
 
-6. In your Firebase project, go to `Settings` and select the `Cloud Messaging` tab. Scroll down to `iOS app configuration` and click **Upload** under `APNs Authentication Key`.
+![plot](./assets/image-4.png)
 
-   ![Firebase APNs Setup](./assets/FIR_1.png)
+Click on `Certificates, Identifiers & Profiles`. Go to Keys from the left side. Create a new Auth Key by clicking on the plus button in the top right side.
 
-7. Enter the Key ID and Team ID:
-   - The Key ID is in the file name: `AuthKey_{Key ID}.p8` (10 characters).
-   - The Team ID is under your account name in the Apple Member Center under the [membership tab](https://developer.apple.com/account/#/membership).
+![plot](./assets/image-5.png)
 
-   ![Firebase APNs Key Details](./assets/FIR_2.png)
+On the following page, add a Key Name, and select APNs.
 
-8. Enable **Push Notifications** in Capabilities.
+![plot](./assets/image-6.png)
 
-   ![Enable Push Notifications](./assets/xcd-2.png)
+Click on the Register button.
 
-9. Enable selected permissions in **Background Modes**.
+![plot](./assets/image-7.png)
 
-   ![Background Modes](./assets/xcd-1.png)
+You can download your auth key file from this page and upload this file to Firebase dashboard without changing its name.
 
+![plot](./assets/image-8.png)
+
+In your firebase project, go to `Settings` and select the `Cloud Messaging` tab. Scroll down to `iOS app configuration`and click upload under `APNs Authentication Key`
+
+![plot](./assets/FIR_1.png)
+
+Enter Key ID and Team ID. Key ID is in the file name, `AuthKey_{Key ID}.p8` and is 10 characters. Your Team ID is in the Apple Member Center under the [membership tab](https://developer.apple.com/account/#/membership) or displayed always under your account name in the top right corner.
+
+![plot](./assets/FIR_2.png)
+
+### Note:
+
+Enable Push Notifications in Capabilities
+
+![plot](./assets/xcd-2.png)
+
+![plot](./assets/xcd-3.png)
+
+Enable selcted permission in Background Modes
+
+![plot](./assets/xcd-1.png)
 ## Step 3: Android Side Setup
 
 ### Modify `AndroidManifest.xml`
