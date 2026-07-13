@@ -30,6 +30,13 @@ String roomId_sender = "";
 // ignore: non_constant_identifier_names
 String romId_receiver = "";
 String? _currentUuid;
+
+Timer? _autoEndCallTimer;
+void cancelAutoEndCallTimer() {
+  _autoEndCallTimer?.cancel();
+  _autoEndCallTimer = null;
+}
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -89,7 +96,8 @@ Future<void> makeFakeCallInComing(String callerId) async {
       ),
     );
     await FlutterCallkitIncoming.showCallkitIncoming(params);
-    Future.delayed(const Duration(seconds: 10), () async {
+    cancelAutoEndCallTimer();
+    _autoEndCallTimer = Timer(const Duration(seconds: 10), () async {
       await FlutterCallkitIncoming.endAllCalls();
     });
   }
@@ -122,6 +130,22 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   String? device;
   // ignore: non_constant_identifier_names
   String caller_id_backgroung = "";
+
+  // FCM listener subscriptions. Stored so they can be cancelled in dispose():
+  // otherwise every new Home (created on Call Rejected / roomLeft) stacks another
+  // onMessage listener whose closure later calls setState() on a disposed state
+  // -> "setState() called after dispose()" and aborts the Call-Accepted -> join
+  // navigation, breaking the call/mic.
+  StreamSubscription<RemoteMessage>? _onMessageSub;
+  StreamSubscription<RemoteMessage>? _onMessageOpenedAppSub;
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -297,7 +321,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       FirebaseMessaging.onBackgroundMessage(
           _firebaseMessagingBackgroundHandler);
 
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _onMessageSub =
+          FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        
+        if (!mounted) return;
+        
         final notificationData = message.data;
 
         if (device == "iOS") {
@@ -370,7 +398,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       });
 
       // Handle background notifications
-      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _onMessageOpenedAppSub =
+          FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        if (!mounted) return;
         print("Notification opened: ${message.data}");
         _handleIncomingNotification(message.data);
       });
@@ -412,6 +442,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         print("True");
       }
 
+      await Permission.camera.request();
+      final micStatus = await Permission.microphone.request();
+      print("Microphone permission: $micStatus");
+      if (micStatus.isPermanentlyDenied) {
+        await openAppSettings();
+      }
+
       String? token = await messaging.getToken();
 
       if (token != null && callerId != null) {
@@ -436,6 +473,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           case Event.actionCallStart:
             break;
           case Event.actionCallAccept:
+            cancelAutoEndCallTimer();
             await sendCallStatus(
               serverUrl: apiUrl!,
               callerId: callerId!,
@@ -727,6 +765,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _onMessageSub?.cancel();
+    _onMessageOpenedAppSub?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
