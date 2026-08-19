@@ -34,7 +34,8 @@ if (flutterVersionName == null) {
 android {
 
     namespace = "com.example.example"
-    compileSdkVersion 35
+    compileSdk = 36
+    ndkVersion = "28.2.13676358"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -79,6 +80,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24"
     implementation 'com.google.firebase:firebase-messaging-ktx:24.1.0'
 }
