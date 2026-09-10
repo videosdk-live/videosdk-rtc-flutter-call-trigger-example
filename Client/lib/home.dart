@@ -537,6 +537,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             break;
           case Event.actionCallCustom:
             break;
+          case Event.actionCallConnected:
+            // TODO: Handle this case.
+            break;
         }
         callback(event);
       });
