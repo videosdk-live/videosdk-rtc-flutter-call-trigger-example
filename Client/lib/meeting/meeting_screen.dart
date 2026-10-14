@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:videosdk/videosdk.dart';
 import 'package:videosdk_flutter_example/home.dart';
@@ -46,20 +45,26 @@ class _MeetingScreenState extends State<MeetingScreen> {
     _room = VideoSDK.createRoom(
         roomId: widget.meetingId,
         token: widget.token,
-        displayName: "John Doe",
+        participantName: "John Doe",
         micEnabled: micEnabled,
         camEnabled: camEnabled,
-        defaultCameraIndex: kIsWeb
-            ? 0
-            : 1 // Index of MediaDevices will be used to set default camera
-        );
+        defaultCamera: FacingMode.FRONT);
 
     setMeetingEventListener();
 
     // Join room
-    _room.join();
+    _joinRoom();
 
     super.initState();
+  }
+
+  Future<void> _joinRoom() async {
+    try {
+      await VideoSDK.requestPermissions();
+      await _room.join();
+    } on VideoSDKError catch (error) {
+      debugPrint("Join failed: ${error.code} ${error.name}");
+    }
   }
 
   Future<void> sendnotification(String api, callerId, status, roomId) async {
@@ -92,10 +97,10 @@ class _MeetingScreenState extends State<MeetingScreen> {
       },
     );
 
-    _room.on(Events.participantLeft, (String participantId) {
-      if (participants.containsKey(participantId)) {
+    _room.on(Events.participantLeft, (Participant participant) {
+      if (participants.containsKey(participant.id)) {
         setState(
-          () => participants.remove(participantId),
+          () => participants.remove(participant.id),
         );
       }
     });

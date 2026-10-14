@@ -10,14 +10,14 @@ class ParticipantTile extends StatefulWidget {
 }
 
 class _ParticipantTileState extends State<ParticipantTile> {
-  Stream? videoStream;
+  RTCStream? videoStream;
 
   @override
   void initState() {
     // initial video stream for the participant
-    widget.participant.streams.forEach((key, Stream stream) {
+    widget.participant.streams.forEach((key, RTCStream stream) {
       setState(() {
-        if (stream.kind == 'video') {
+        if (stream.kind == MediaType.VIDEO) {
           videoStream = stream;
         }
       });
@@ -34,14 +34,14 @@ class _ParticipantTileState extends State<ParticipantTile> {
   }
 
   _initStreamListeners() {
-    widget.participant.on(Events.streamEnabled, (Stream stream) {
-      if (stream.kind == 'video') {
+    widget.participant.on(Events.streamEnabled, (RTCStream stream) {
+      if (stream.kind == MediaType.VIDEO) {
         setState(() => videoStream = stream);
       }
     });
 
-    widget.participant.on(Events.streamDisabled, (Stream stream) {
-      if (stream.kind == 'video') {
+    widget.participant.on(Events.streamDisabled, (RTCStream stream) {
+      if (stream.kind == MediaType.VIDEO) {
         setState(() => videoStream = null);
       }
     });
